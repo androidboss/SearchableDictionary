@@ -59,6 +59,8 @@ public class SearchableDictionary extends Activity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        // TODO 为什么没有调用setIntent(intent)呀？
+        // TODO 参考官网说明，应该加入setIntent(intent)，否则还是之前onCreate里面的那个Intent
         // Because this activity has set launchMode="singleTop", the system calls this method
         // to deliver the intent if this activity is currently the foreground activity when
         // invoked again (when the user executes a search from this activity, we don't create
@@ -69,13 +71,15 @@ public class SearchableDictionary extends Activity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // handles a click on a search suggestion; launches activity to show word
-            // TODO 是否是输入法的搜索按钮触发的呢？待研究
+            // 处理正常的搜索请求
             Intent wordIntent = new Intent(this, WordActivity.class);
             wordIntent.setData(intent.getData());
             startActivity(wordIntent);
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // handles a search query
-            // TODO 点击系统搜索框右边的放大器按钮触发的?
+            // 处理对建议项的点击操作（因为建议项都是使用ACTION_VIEW的）
+            // 该intent在QUERY字符串中附带了搜索请求。
+            // 搜索activity启动后必须检查此intent并解析该字符串:
             String query = intent.getStringExtra(SearchManager.QUERY);
             showResults(query);
         }
@@ -123,7 +127,7 @@ public class SearchableDictionary extends Activity {
                     Intent wordIntent = new Intent(getApplicationContext(), WordActivity.class);
                     Uri data = Uri.withAppendedPath(DictionaryProvider.CONTENT_URI,
                                                     String.valueOf(id));
-                    // TODO 上面的id就是一个从下到下的顺序
+                    // TODO 上面的id就是一个从上到下的顺序
                     wordIntent.setData(data);
                     startActivity(wordIntent);
                 }

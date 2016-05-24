@@ -39,6 +39,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
                 <!-- No category needed, because the Intent will specify指定 this class component-->
+                <!--不需要指定值为DEFAULT的<category>属性，系统会利用组件名称把ACTION_SEARCH intent明确地传递给搜索activity-->
             </intent-filter>
 
             <!-- Points to searchable meta data. -->
@@ -55,6 +56,7 @@
                   android:authorities="com.example.android.searchabledict.DictionaryProvider" />
 
         <!-- Points to searchable activity so the whole app can invoke search. -->
+        <!-- 指向搜索属性的activity，so整个app都可以调取搜索功能 -->
         <meta-data android:name="android.app.default_searchable"
                    android:value=".SearchableDictionary" />
 
